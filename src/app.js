@@ -6,6 +6,8 @@ const { createCheckoutSession, handleStripeEvent } = require('./stripe');
 const { render } = require('./views');
 const { escapeHtml, formatPrice, trackingUrl } = require('./emails');
 const { createAdminRouter } = require('./admin');
+const subscribers = require('./subscribers');
+const blog = require('./blog');
 
 // Limiteur de débit minimaliste en mémoire (par IP et par route).
 function rateLimit({ windowMs, max }) {
@@ -107,6 +109,11 @@ function createApp(ctx) {
   app.use(express.json({ limit: '20kb' }));
   app.use(express.urlencoded({ extended: false, limit: '20kb' }));
   app.use(express.static(path.join(__dirname, '..', 'public'), { maxAge: config.env === 'production' ? '7d' : 0 }));
+
+  app.get('/healthz', (req, res) => {
+    db.prepare('SELECT 1').get();
+    res.json({ ok: true });
+  });
 
   app.get('/', (req, res) => {
     const reviewSummary = orders.publicReviews(db, 0);
@@ -223,16 +230,51 @@ function createApp(ctx) {
     res.send(render('message', { title: 'Merci !', heading: 'Merci pour votre avis 💜', message: 'Il aide d\'autres personnes à mieux dormir. Belle nuit !' }));
   });
 
+  app.get('/blog', (req, res) => {
+    const list = blog.ARTICLES.slice()
+      .reverse()
+      .map(
+        (a) => `<a class="card blog-item" href="/blog/${a.slug}"><span class="muted">${escapeHtml(blog.formatDate(a.date))}</span><h2>${escapeHtml(a.title)}</h2><p>${escapeHtml(a.description)}</p><span class="blog-more">Lire l'article →</span></a>`
+      )
+      .join('');
+    res.send(render('blog', { title: `Blog — ${SHOP.name}`, description: 'Conseils pratiques pour mieux dormir.', list }));
+  });
+
+  app.get('/blog/:slug', (req, res, next) => {
+    const article = blog.findArticle(req.params.slug);
+    if (!article) return next();
+    const jsonLd = safeJson({
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: article.title,
+      description: article.description,
+      datePublished: article.date,
+      author: { '@type': 'Organization', name: SHOP.name },
+      publisher: { '@type': 'Organization', name: SHOP.name },
+      mainEntityOfPage: `${SHOP.baseUrl}/blog/${article.slug}`,
+    });
+    res.send(
+      render('article', {
+        title: `${article.title} — ${SHOP.name}`,
+        description: article.description,
+        heading: article.title,
+        dateLabel: blog.formatDate(article.date),
+        content: blog.articleContent(article.slug),
+        jsonLd,
+      })
+    );
+  });
+
   for (const [slug, title] of Object.entries(LEGAL_PAGES)) {
     app.get(`/${slug}`, (req, res) => res.send(render(slug, { title: `${title} — ${SHOP.name}`, heading: title })));
   }
 
   app.get('/robots.txt', (req, res) => {
-    res.type('text/plain').send(`User-agent: *\nDisallow: /admin\nDisallow: /avis/\nDisallow: /merci\nSitemap: ${SHOP.baseUrl}/sitemap.xml\n`);
+    res.type('text/plain').send(`User-agent: *\nDisallow: /admin\nDisallow: /avis/\nDisallow: /merci\nDisallow: /desinscription/\nSitemap: ${SHOP.baseUrl}/sitemap.xml\n`);
   });
 
   app.get('/sitemap.xml', (req, res) => {
-    const urls = ['/', ...Object.keys(LEGAL_PAGES).map((s) => `/${s}`), '/suivi'];
+    const urls = ['/', '/blog', ...blog.ARTICLES.map((a) => `/blog/${a.slug}`), ...Object.keys(LEGAL_PAGES).map((s) => `/${s}`), '/suivi'];
     res.type('application/xml').send(
       `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls
         .map((u) => `  <url><loc>${SHOP.baseUrl}${u}</loc></url>`)
@@ -268,7 +310,46 @@ function createApp(ctx) {
   });
 
   app.get('/analytics-config.js', (req, res) => {
-    res.type('application/javascript').send(`window.ANALYTICS = ${safeJson(config.analytics)};`);
+    res
+      .type('application/javascript')
+      .send(
+        `window.ANALYTICS = ${safeJson(config.analytics)};\n` +
+          `window.SUPPORT_ENABLED = ${ctx.support ? 'true' : 'false'};\n` +
+          `window.WELCOME = ${safeJson({ enabled: Boolean(config.welcome.code), text: config.welcome.text })};`
+      );
+  });
+
+  app.post('/api/subscribe', rateLimit({ windowMs: 60e3, max: 5 }), async (req, res) => {
+    try {
+      const body = req.body || {};
+      await subscribers.subscribe(ctx, { email: body.email, consent: body.consent, source: body.source });
+      res.json({ ok: true, message: config.welcome.code ? 'C\'est envoyé ! Vérifiez votre boîte mail.' : 'Merci, vous êtes inscrit(e) !' });
+    } catch (err) {
+      if (err instanceof subscribers.SubscribeError) return res.status(400).json({ error: err.message });
+      throw err;
+    }
+  });
+
+  app.get('/desinscription/:token', (req, res) => {
+    const ok = subscribers.unsubscribe(db, req.params.token);
+    res.send(
+      render('message', {
+        title: 'Désinscription',
+        heading: ok ? 'Vous êtes désinscrit(e)' : 'Lien invalide',
+        message: ok ? 'Vous ne recevrez plus nos e-mails promotionnels. Les e-mails liés à vos commandes restent envoyés.' : 'Ce lien de désinscription est invalide.',
+      })
+    );
+  });
+
+  app.post('/api/support', rateLimit({ windowMs: 60e3, max: 20 }), async (req, res) => {
+    if (!ctx.support) return res.status(404).json({ error: 'Assistant indisponible.' });
+    try {
+      const result = await ctx.support.reply(req.body && req.body.messages);
+      res.status(result.error ? 400 : 200).json(result);
+    } catch (err) {
+      console.error('[support] erreur', err.message);
+      res.status(502).json({ error: `L'assistant est momentanément indisponible. Écrivez-nous à ${SHOP.supportEmail}.` });
+    }
   });
 
   app.use('/admin', createAdminRouter(ctx));

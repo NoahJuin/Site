@@ -1,3 +1,4 @@
+const path = require('node:path');
 const { config, SHOP } = require('./config');
 const { openDb } = require('./db');
 const { createMailer } = require('./emails');
@@ -5,6 +6,7 @@ const { createSupplier } = require('./suppliers');
 const { createStripe } = require('./stripe');
 const { createApp } = require('./app');
 const { runJobs } = require('./jobs');
+const { createSupportAgent } = require('./support');
 
 const db = openDb(config.databasePath);
 const ctx = {
@@ -12,7 +14,9 @@ const ctx = {
   mailer: createMailer(db),
   supplier: createSupplier({ db }),
   stripe: createStripe(),
+  backupDir: path.join(path.dirname(path.resolve(config.databasePath)), 'backups'),
 };
+ctx.support = createSupportAgent(ctx);
 
 if (config.env === 'production') {
   const missing = ['STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET', 'ADMIN_PASSWORD', 'BASE_URL', 'SMTP_HOST'].filter((k) => !process.env[k]);
@@ -21,7 +25,7 @@ if (config.env === 'production') {
 
 const app = createApp(ctx);
 const server = app.listen(config.port, () => {
-  console.log(`${SHOP.name} en ligne sur ${SHOP.baseUrl} (port ${config.port}, fournisseur : ${ctx.supplier.name}${ctx.stripe ? '' : ', paiement en mode démo'})`);
+  console.log(`${SHOP.name} en ligne sur ${SHOP.baseUrl} (port ${config.port}, fournisseur : ${ctx.supplier.name}${ctx.stripe ? '' : ', paiement en mode démo'}${ctx.support ? `, assistant IA : ${ctx.support.model}` : ''})`);
 });
 
 if (config.jobs.enabled) {

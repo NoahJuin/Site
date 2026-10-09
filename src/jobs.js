@@ -1,6 +1,8 @@
 // Tâches automatiques, lancées toutes les JOBS_INTERVAL_MINUTES par le serveur
 // (ou via `npm run jobs` depuis un cron externe).
 
+const fs = require('node:fs');
+const path = require('node:path');
 const { config, SHOP, PRODUCT, findOffer } = require('./config');
 const { kvGet, kvSet } = require('./db');
 const orders = require('./orders');
@@ -103,6 +105,20 @@ async function sendDailyReport(ctx, date = new Date()) {
   return true;
 }
 
+// Sauvegarde quotidienne de la base (copie cohérente via VACUUM INTO), 7 jours conservés.
+function backupDatabase(ctx, date = new Date()) {
+  if (!ctx.backupDir) return false;
+  const day = date.toISOString().slice(0, 10);
+  if (kvGet(ctx.db, 'backup_date') === day) return false;
+  fs.mkdirSync(ctx.backupDir, { recursive: true });
+  const file = path.join(ctx.backupDir, `shop-${day}.db`);
+  if (!fs.existsSync(file)) ctx.db.prepare('VACUUM INTO ?').run(file);
+  kvSet(ctx.db, 'backup_date', day);
+  const backups = fs.readdirSync(ctx.backupDir).filter((f) => /^shop-\d{4}-\d{2}-\d{2}\.db$/.test(f)).sort();
+  for (const old of backups.slice(0, Math.max(0, backups.length - 7))) fs.unlinkSync(path.join(ctx.backupDir, old));
+  return true;
+}
+
 let running = false;
 
 async function runJobs(ctx) {
@@ -114,6 +130,7 @@ async function runJobs(ctx) {
       tracking: await syncTracking(ctx),
       reviewRequests: await sendReviewRequests(ctx),
       dailyReport: await sendDailyReport(ctx),
+      backup: backupDatabase(ctx),
     };
     kvSet(ctx.db, 'jobs_last_run', new Date().toISOString());
     return result;
@@ -122,14 +139,19 @@ async function runJobs(ctx) {
   }
 }
 
-module.exports = { runJobs, retryFulfillment, syncTracking, sendReviewRequests, sendDailyReport, statsSince };
+module.exports = { runJobs, retryFulfillment, syncTracking, sendReviewRequests, sendDailyReport, backupDatabase, statsSince };
 
 if (require.main === module) {
   const { openDb } = require('./db');
   const { createMailer } = require('./emails');
   const { createSupplier } = require('./suppliers');
   const db = openDb(config.databasePath);
-  const ctx = { db, mailer: createMailer(db), supplier: createSupplier({ db }) };
+  const ctx = {
+    db,
+    mailer: createMailer(db),
+    supplier: createSupplier({ db }),
+    backupDir: path.join(path.dirname(path.resolve(config.databasePath)), 'backups'),
+  };
   runJobs(ctx)
     .then((r) => {
       console.log('[jobs]', r);

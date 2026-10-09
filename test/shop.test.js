@@ -4,6 +4,7 @@
 process.env.STRIPE_WEBHOOK_SECRET = 'whsec_test_secret';
 process.env.ADMIN_PASSWORD = 'secret';
 process.env.BASE_URL = 'http://shop.test';
+process.env.WELCOME_CODE = 'BIENVENUE10';
 
 const { test, describe, before, after, beforeEach, afterEach } = require('node:test');
 const assert = require('node:assert/strict');
@@ -249,6 +250,22 @@ describe('résilience et relances', () => {
     assert.equal(orders.getOrder(ctx.db, 1).status, 'refunded');
   });
 
+  test('inscription e-mail : consentement obligatoire, code envoyé une fois, désinscription', async () => {
+    const post = (body) =>
+      fetch(`${base}/api/subscribe`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    assert.equal((await post({ email: 'tom@example.com' })).status, 400);
+    assert.equal((await post({ email: 'pas-un-email', consent: true })).status, 400);
+    assert.equal((await post({ email: 'Tom@Example.com', consent: true })).status, 200);
+    assert.equal((await post({ email: 'tom@example.com', consent: true })).status, 200);
+    const welcome = emailsOf('welcome');
+    assert.equal(welcome.length, 1);
+    assert.match(welcome[0].subject, /BIENVENUE10/);
+    const { token } = ctx.db.prepare('SELECT token FROM subscribers WHERE email = ?').get('tom@example.com');
+    const page = await (await fetch(`${base}/desinscription/${token}`)).text();
+    assert.match(page, /désinscrit/);
+    assert.ok(ctx.db.prepare('SELECT unsubscribed_at FROM subscribers WHERE token = ?').get(token).unsubscribed_at);
+  });
+
   test('admin protégé par mot de passe et contre le CSRF', async () => {
     const auth = `Basic ${Buffer.from('admin:secret').toString('base64')}`;
     assert.equal((await fetch(`${base}/admin`)).status, 401);
@@ -258,5 +275,24 @@ describe('résilience et relances', () => {
     assert.equal(csrf.status, 403);
     const ok = await fetch(`${base}/admin/taches`, { method: 'POST', headers: { Authorization: auth, Origin: base }, redirect: 'manual' });
     assert.equal(ok.status, 303);
+  });
+});
+
+describe('sauvegardes', () => {
+  test('sauvegarde quotidienne avec rotation sur 7 jours', () => {
+    const fs = require('node:fs');
+    const os = require('node:os');
+    const path = require('node:path');
+    const { backupDatabase } = require('../src/jobs');
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'backup-test-'));
+    const db = openDb(':memory:');
+    for (let d = 1; d <= 9; d++) {
+      assert.equal(backupDatabase({ db, backupDir: dir }, new Date(`2026-10-${String(d).padStart(2, '0')}T08:00:00Z`)), true);
+    }
+    assert.equal(backupDatabase({ db, backupDir: dir }, new Date('2026-10-09T20:00:00Z')), false);
+    const files = fs.readdirSync(dir).sort();
+    assert.equal(files.length, 7);
+    assert.equal(files[0], 'shop-2026-10-03.db');
+    fs.rmSync(dir, { recursive: true, force: true });
   });
 });

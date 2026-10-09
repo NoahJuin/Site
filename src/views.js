@@ -44,7 +44,12 @@ function baseVars() {
 function render(name, vars = {}) {
   const all = { ...baseVars(), ...vars };
   const body = interpolate(read(name), all);
-  return interpolate(read('layout'), { ...all, body, title: vars.title || `${SHOP.name} — ${PRODUCT.tagline}` });
+  return interpolate(read('layout'), {
+    ...all,
+    body,
+    title: vars.title || `${SHOP.name} — ${PRODUCT.tagline}`,
+    description: vars.description || PRODUCT.description,
+  });
 }
 
 module.exports = { render, interpolate };

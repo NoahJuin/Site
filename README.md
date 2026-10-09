@@ -2,12 +2,16 @@
 
 Une boutique mono-produit prête à vendre, avec tout le back-office automatisé :
 paiement, transmission au fournisseur, suivi de colis, e-mails clients, relance des paniers abandonnés,
-collecte d'avis vérifiés, rapport quotidien et tableau de bord.
+collecte d'avis vérifiés, assistant service client IA, capture d'e-mails, blog SEO, rapport quotidien,
+sauvegardes et tableau de bord.
+
+📋 **Pour lancer la boutique : suivez [`docs/lancement.md`](docs/lancement.md)**
+📣 **Pour vendre : [`docs/marketing.md`](docs/marketing.md)** (rentabilité, scripts vidéo, textes de pubs, plan de test)
 
 ```bash
 npm install
 npm run dev        # http://localhost:3000 — mode démo (paiement simulé, fournisseur simulé)
-npm test           # 11 tests de bout en bout
+npm test           # 18 tests de bout en bout
 ```
 
 Admin : `http://localhost:3000/admin` (lancez avec `ADMIN_PASSWORD=... npm run dev`).
@@ -67,6 +71,11 @@ Client ──► Stripe Checkout ──► webhook ──► Commande payée
 | Rapport quotidien | Chaque jour : CA de la veille, marge estimée, paniers abandonnés, erreurs. |
 | SEO / Shopping | `sitemap.xml`, `robots.txt`, données structurées Produit, flux Google Merchant Center sur `/feed.xml`. |
 | Publicité | Pixels Meta, TikTok et GA4 chargés uniquement après consentement cookies. Événements ViewContent, InitiateCheckout et Purchase. |
+| Service client IA | Bulle de chat (Claude) qui répond 24h/24 sur le produit, la livraison et les retours, donne le statut d'une commande (numéro + e-mail obligatoires) et transmet le reste au service client par e-mail. Activé avec `ANTHROPIC_API_KEY`. |
+| Capture d'e-mails | Pop-up (intention de sortie ou après 20 s, une seule fois) avec consentement explicite. Le code de bienvenue part automatiquement, avec désinscription en un clic et export CSV dans l'admin. Activé avec `WELCOME_CODE`. |
+| Blog SEO | 3 articles optimisés (données structurées Article, sitemap) qui renvoient vers le produit. |
+| Sauvegardes | Copie quotidienne de la base, 7 jours conservés, sur le disque persistant. |
+| Qualité | 18 tests de bout en bout, CI GitHub Actions et endpoint de santé `/healthz`. |
 
 ---
 
@@ -129,7 +138,11 @@ src/
   jobs.js            tâches planifiées (relances fournisseur, suivi, avis, rapport)
   emails.js          e-mails transactionnels
   admin.js           tableau de bord /admin
+  support.js         assistant service client IA (Claude, outils : suivi de commande, transfert humain)
+  subscribers.js     liste e-mail + code de bienvenue
+  blog.js            articles SEO (contenu dans views/blog/)
   suppliers/         connecteurs fournisseur : cj, email, mock
+docs/                checklist de lancement + kit marketing
 views/               pages HTML (vente, merci, suivi, avis, pages légales)
 public/              CSS, JS, illustrations
 test/                tests de bout en bout (node --test)

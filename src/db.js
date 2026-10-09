@@ -65,6 +65,16 @@ CREATE TABLE IF NOT EXISTS stripe_events (
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
+CREATE TABLE IF NOT EXISTS subscribers (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT NOT NULL UNIQUE,
+  token TEXT NOT NULL UNIQUE,
+  source TEXT,
+  consent_at TEXT NOT NULL DEFAULT (datetime('now')),
+  welcome_sent_at TEXT,
+  unsubscribed_at TEXT
+);
+
 CREATE TABLE IF NOT EXISTS kv (
   key TEXT PRIMARY KEY,
   value TEXT,

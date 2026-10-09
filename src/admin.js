@@ -37,6 +37,13 @@ function sameOrigin(req, res, next) {
   res.status(403).send('Requête refusée (origine invalide)');
 }
 
+// Neutralise les formules Excel/Sheets (injection CSV).
+function csvCell(v) {
+  let s = v == null ? '' : String(v);
+  if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
+  return `"${s.replace(/"/g, '""')}"`;
+}
+
 function sqlDate(daysAgo) {
   return new Date(Date.now() - daysAgo * 24 * 3600e3).toISOString().replace('T', ' ').slice(0, 19);
 }
@@ -52,7 +59,7 @@ function page(title, body, flash) {
 <meta name="robots" content="noindex"><title>${e(title)} — ${e(SHOP.name)}</title><link rel="icon" href="/img/favicon.svg">
 <link rel="stylesheet" href="/admin.css"></head><body>
 <header class="adm-header"><a href="/admin" class="adm-logo">${e(SHOP.name)} <span>admin</span></a>
-<nav><a href="/admin">Tableau de bord</a><a href="/admin/avis">Avis</a><a href="/admin/emails">E-mails</a><a href="/admin/commandes.csv">Export CSV</a><a href="/" target="_blank">Voir la boutique ↗</a></nav></header>
+<nav><a href="/admin">Tableau de bord</a><a href="/admin/avis">Avis</a><a href="/admin/emails">E-mails</a><a href="/admin/commandes.csv">Commandes CSV</a><a href="/admin/abonnes.csv">Abonnés CSV</a><a href="/" target="_blank">Voir la boutique ↗</a></nav></header>
 <main class="adm-main">${flash ? `<p class="adm-flash">${e(flash)}</p>` : ''}${body}</main></body></html>`;
 }
 
@@ -130,6 +137,7 @@ ${kpi('30 derniers jours', statsSince(db, sqlDate(30), until))}
 <div class="adm-kpi"><h3>Automatisation</h3>
 <p>Fournisseur : <strong>${e(ctx.supplier.name)}</strong></p>
 <p>Conversion paiement : <strong>${conversion} %</strong></p>
+<p>Abonnés e-mail : <strong>${db.prepare('SELECT COUNT(*) AS n FROM subscribers WHERE unsubscribed_at IS NULL').get().n}</strong></p>
 <p class="adm-muted">Dernier passage des tâches : ${lastRun ? e(lastRun.slice(0, 16).replace('T', ' ')) + ' UTC' : 'jamais'}</p>
 <form method="post" action="/admin/taches"><button>Lancer les tâches maintenant</button></form></div>
 </section>
@@ -226,14 +234,14 @@ ${problems ? `<p class="adm-alert">⚠️ ${problems} commande(s) nécessitent v
     );
   });
 
+  router.get('/abonnes.csv', (req, res) => {
+    const rows = db.prepare('SELECT email, source, consent_at FROM subscribers WHERE unsubscribed_at IS NULL ORDER BY id DESC').all();
+    const csv = ['email;source;consentement', ...rows.map((r) => [r.email, r.source, r.consent_at].map(csvCell).join(';'))].join('\n');
+    res.set('Content-Disposition', 'attachment; filename="abonnes.csv"').type('text/csv; charset=utf-8').send(`\ufeff${csv}`);
+  });
+
   router.get('/commandes.csv', (req, res) => {
     const cols = ['number', 'status', 'paid_at', 'customer_name', 'email', 'phone', 'offer_id', 'items', 'amount_total', 'shipping_address', 'supplier_order_id', 'tracking_number'];
-    const csvCell = (v) => {
-      let s = v == null ? '' : String(v);
-      // Neutralise les formules Excel/Sheets (injection CSV).
-      if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
-      return `"${s.replace(/"/g, '""')}"`;
-    };
     const rows = db.prepare("SELECT * FROM orders WHERE paid_at IS NOT NULL ORDER BY id DESC").all();
     const csv = [cols.join(';'), ...rows.map((r) => cols.map((c) => csvCell(c === 'items' ? itemsText(r) : r[c])).join(';'))].join('\n');
     res.set('Content-Disposition', 'attachment; filename="commandes.csv"').type('text/csv; charset=utf-8').send(`﻿${csv}`);

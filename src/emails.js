@@ -103,6 +103,20 @@ ${button(order.recovery_url || SHOP.baseUrl, 'Finaliser ma commande')}
     };
   },
 
+  welcome(_order, { code, text, unsubscribeUrl }) {
+    return {
+      subject: `Votre code : ${code} 🌙`,
+      html: layout(
+        'Bienvenue !',
+        `<p>Merci de votre inscription. Voici votre code de bienvenue (${escapeHtml(text)}) :</p>
+<p style="font-size:26px;font-weight:bold;letter-spacing:3px;background:#f4f2fb;padding:16px;border-radius:12px;text-align:center">${escapeHtml(code)}</p>
+<p>Saisissez-le à l'étape du paiement. Livraison offerte et ${SHOP.returnDays} nuits pour essayer.</p>
+${button(`${SHOP.baseUrl}/#commander`, 'Choisir mon bandeau')}
+<p style="font-size:12px;color:#6b6f80"><a href="${escapeHtml(unsubscribeUrl)}" style="color:#6b6f80">Se désinscrire</a></p>`
+      ),
+    };
+  },
+
   admin_alert(order, { title, message }) {
     return {
       subject: `[${SHOP.name}] ${title}`,

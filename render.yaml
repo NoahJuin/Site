@@ -7,7 +7,7 @@ services:
     region: frankfurt
     buildCommand: npm ci --omit=dev
     startCommand: npm start
-    healthCheckPath: /robots.txt
+    healthCheckPath: /healthz
     disk:
       name: data
       mountPath: /var/data
@@ -32,6 +32,10 @@ services:
       - key: SMTP_PASS
         sync: false
       - key: SUPPORT_EMAIL
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: WELCOME_CODE
         sync: false
       - key: SUPPLIER_PROVIDER
         value: email

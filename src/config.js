@@ -96,6 +96,11 @@ const config = {
     // Les avis d'acheteurs vérifiés sont publiés automatiquement, positifs comme négatifs.
     autoApprove: bool(env.AUTO_APPROVE_REVIEWS, true),
   },
+  welcome: {
+    // Code promo à créer dans Stripe (Produits → Coupons), ex. BIENVENUE10.
+    code: env.WELCOME_CODE || '',
+    text: env.WELCOME_TEXT || '-10 % sur votre première commande',
+  },
   analytics: {
     metaPixelId: env.META_PIXEL_ID || '',
     tiktokPixelId: env.TIKTOK_PIXEL_ID || '',
