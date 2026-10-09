@@ -1,0 +1,35 @@
+<main class="section page legal">
+  <div class="container narrow">
+    <h1>{{heading}}</h1>
+    <p class="muted">En vigueur au {{year}}.</p>
+
+    <h2>1. Vendeur</h2>
+    <p>Le site est exploité par {{shop.companyName}}, {{shop.companyAddress}}, SIRET {{shop.companySiret}}, joignable à <a href="mailto:{{shop.supportEmail}}">{{shop.supportEmail}}</a>. Les présentes conditions s'appliquent à toute commande passée sur le site par un consommateur.</p>
+
+    <h2>2. Produits</h2>
+    <p>Les caractéristiques essentielles des produits sont présentées sur leur fiche. Les photographies et illustrations sont non contractuelles.</p>
+
+    <h2>3. Prix</h2>
+    <p>Les prix sont indiqués en euros toutes taxes comprises. Les frais de livraison sont offerts pour les pays de livraison proposés au moment de la commande.</p>
+
+    <h2>4. Commande et paiement</h2>
+    <p>La commande est validée après paiement intégral. Le paiement est traité de manière sécurisée par Stripe (carte bancaire, Apple Pay, Google Pay et autres moyens affichés). Un e-mail de confirmation récapitulant la commande est envoyé automatiquement.</p>
+
+    <h2>5. Livraison</h2>
+    <p>Les produits sont expédiés depuis l'entrepôt de notre partenaire logistique, généralement sous 24 à 48 h, puis livrés sous {{shop.shippingDaysMin}} à {{shop.shippingDaysMax}} jours ouvrés à l'adresse indiquée. Un numéro de suivi est communiqué par e-mail dès l'expédition. En l'absence de livraison dans un délai de 30 jours, le client peut résoudre la vente dans les conditions de l'article L216-6 du Code de la consommation. Le transfert des risques intervient à la remise du colis au client.</p>
+
+    <h2>6. Droit de rétractation</h2>
+    <p>Conformément aux articles L221-18 et suivants du Code de la consommation, vous disposez de 14 jours à compter de la réception pour vous rétracter, sans avoir à motiver votre décision. Notifiez-nous votre décision par e-mail à {{shop.supportEmail}} (vous pouvez utiliser le modèle ci-dessous). Le produit doit être retourné dans les 14 jours suivant cette notification. Nous vous remboursons la totalité des sommes versées dans les 14 jours suivant la réception de votre demande, ce remboursement pouvant être différé jusqu'à la récupération du produit.</p>
+    <p>En complément, nous offrons une garantie commerciale « {{shop.returnDays}} nuits satisfait ou remboursé » détaillée sur la page <a href="/livraison-retours">livraison et retours</a>.</p>
+    <blockquote>Modèle de formulaire de rétractation — À l'attention de {{shop.companyName}}, {{shop.companyAddress}}, {{shop.supportEmail}} : Je vous notifie par la présente ma rétractation du contrat portant sur la vente du bien ci-dessous : [n° de commande], commandé le [date] / reçu le [date], nom du consommateur, adresse du consommateur, date.</blockquote>
+
+    <h2>7. Garanties légales</h2>
+    <p>Tous les produits bénéficient de la garantie légale de conformité (articles L217-3 et suivants du Code de la consommation) pendant 2 ans à compter de la délivrance, et de la garantie des vices cachés (articles 1641 et suivants du Code civil). Le consommateur peut choisir entre la réparation et le remplacement du bien, et est dispensé de prouver le défaut pendant 24 mois.</p>
+
+    <h2>8. Service client et médiation</h2>
+    <p>Pour toute réclamation, contactez-nous à {{shop.supportEmail}}. En cas de litige non résolu, vous pouvez recourir gratuitement au médiateur de la consommation : {{shop.mediator}}. Vous pouvez également utiliser la plateforme européenne de règlement en ligne des litiges.</p>
+
+    <h2>9. Droit applicable</h2>
+    <p>Les présentes conditions sont soumises au droit français, sans préjudice des dispositions impératives plus protectrices du pays de résidence du consommateur.</p>
+  </div>
+</main>

@@ -1,0 +1,29 @@
+{
+  "name": "dormea-shop",
+  "version": "1.0.0",
+  "description": "Boutique e-commerce automatisée (Stripe + dropshipping) — bandeau de sommeil Bluetooth",
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/server.js",
+    "dev": "node --watch --disable-warning=ExperimentalWarning src/server.js",
+    "jobs": "node --disable-warning=ExperimentalWarning src/jobs.js",
+    "test": "node --disable-warning=ExperimentalWarning --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NoahJuin/Site.git"
+  },
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/NoahJuin/Site/issues"
+  },
+  "homepage": "https://github.com/NoahJuin/Site#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "nodemailer": "^10.0.16",
+    "stripe": "^23.0.0"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=22.13"
+  }
+}

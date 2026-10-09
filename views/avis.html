@@ -1,0 +1,21 @@
+<main class="section page">
+  <div class="container narrow">
+    <h1>Votre avis compte</h1>
+    <p class="lead">Votre avis sera publié avec la mention « Achat vérifié ». Positif ou négatif, il aide les autres à choisir, et nous à nous améliorer.</p>
+    {{{error}}}
+    <form method="post" action="/avis/{{token}}" class="card form-stack">
+      <fieldset class="stars">
+        <legend>Votre note</legend>
+        <input type="radio" id="s5" name="rating" value="5" required><label for="s5" title="5 étoiles">★</label>
+        <input type="radio" id="s4" name="rating" value="4"><label for="s4" title="4 étoiles">★</label>
+        <input type="radio" id="s3" name="rating" value="3"><label for="s3" title="3 étoiles">★</label>
+        <input type="radio" id="s2" name="rating" value="2"><label for="s2" title="2 étoiles">★</label>
+        <input type="radio" id="s1" name="rating" value="1"><label for="s1" title="1 étoile">★</label>
+      </fieldset>
+      <label>Prénom (affiché)<input name="name" required maxlength="60"></label>
+      <label>Titre<input name="title" maxlength="120" placeholder="En quelques mots"></label>
+      <label>Votre avis<textarea name="body" required minlength="10" maxlength="2000" rows="5" placeholder="Confort, son, autonomie, qualité du sommeil…"></textarea></label>
+      <button class="btn" type="submit">Publier mon avis</button>
+    </form>
+  </div>
+</main>

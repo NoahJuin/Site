@@ -1,0 +1,39 @@
+# Déploiement en un clic sur Render (Blueprint). Le disque persistant conserve la base SQLite.
+services:
+  - type: web
+    name: dormea
+    runtime: node
+    plan: starter
+    region: frankfurt
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /robots.txt
+    disk:
+      name: data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_PATH
+        value: /var/data/shop.db
+      - key: BASE_URL
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SUPPORT_EMAIL
+        sync: false
+      - key: SUPPLIER_PROVIDER
+        value: email
+      - key: SUPPLIER_EMAIL
+        sync: false

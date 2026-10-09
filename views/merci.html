@@ -1,0 +1,17 @@
+<main class="section page">
+  <div class="container narrow center">
+    <img src="/img/icon-moon.svg" alt="" width="64" height="64">
+    <h1>Merci {{firstName}} !</h1>
+    <p class="lead">Votre commande <strong>{{order.number}}</strong> ({{total}}) est bien enregistrée.</p>
+    <div class="card">
+      <ol class="next-steps">
+        <li><strong>Maintenant</strong> — un e-mail de confirmation vient de vous être envoyé.</li>
+        <li><strong>Sous 24 à 48 h</strong> — votre commande est préparée.</li>
+        <li><strong>À l'expédition</strong> — vous recevez automatiquement votre numéro de suivi.</li>
+      </ol>
+    </div>
+    <p><a class="btn btn-ghost" href="/suivi?commande={{order.number}}">Suivre ma commande</a></p>
+    <p class="muted">Une question ? Écrivez-nous à <a href="mailto:{{shop.supportEmail}}">{{shop.supportEmail}}</a>.</p>
+  </div>
+</main>
+<script>window.PURCHASE = {{{purchase}}};</script>

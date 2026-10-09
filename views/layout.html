@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{title}}</title>
+  <meta name="description" content="{{product.description}}">
+  <meta name="theme-color" content="#12152b">
+  <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="product">
+  <meta property="og:title" content="{{title}}">
+  <meta property="og:description" content="{{product.description}}">
+  <meta property="og:image" content="{{shop.baseUrl}}/img/product-card.png">
+  <meta property="og:url" content="{{shop.baseUrl}}">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="announce">Livraison suivie offerte · Essai {{shop.returnDays}} nuits · Paiement sécurisé</div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo" aria-label="{{shop.name}} — accueil">
+        <img src="/img/favicon.svg" alt="" width="28" height="28">
+        <span>{{shop.name}}</span>
+      </a>
+      <nav class="nav">
+        <a href="/#avantages">Avantages</a>
+        <a href="/#comparatif">Comparatif</a>
+        <a href="/#faq">FAQ</a>
+        <a href="/suivi">Suivre ma commande</a>
+      </nav>
+      <a href="/#commander" class="btn btn-small">Commander</a>
+    </div>
+  </header>
+
+  {{{body}}}
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a href="/" class="logo logo-light"><img src="/img/favicon.svg" alt="" width="28" height="28"><span>{{shop.name}}</span></a>
+        <p>{{product.tagline}}</p>
+        <p><a href="mailto:{{shop.supportEmail}}">{{shop.supportEmail}}</a></p>
+      </div>
+      <div>
+        <h4>Boutique</h4>
+        <a href="/#commander">Commander</a>
+        <a href="/suivi">Suivre ma commande</a>
+        <a href="/livraison-retours">Livraison &amp; retours</a>
+      </div>
+      <div>
+        <h4>Informations</h4>
+        <a href="/mentions-legales">Mentions légales</a>
+        <a href="/cgv">CGV</a>
+        <a href="/confidentialite">Confidentialité</a>
+        <button type="button" class="link-button" data-cookie-settings>Gérer les cookies</button>
+      </div>
+    </div>
+    <p class="container copyright">© {{year}} {{shop.name}} — {{shop.companyName}}</p>
+  </footer>
+
+  <div class="cookie-banner" id="cookie-banner" hidden>
+    <p>Nous utilisons des cookies de mesure d'audience et publicitaires pour améliorer le site et nos annonces. <a href="/confidentialite">En savoir plus</a></p>
+    <div class="cookie-actions">
+      <button type="button" class="btn btn-ghost" data-consent="refuse">Refuser</button>
+      <button type="button" class="btn" data-consent="accept">Accepter</button>
+    </div>
+  </div>
+
+  <script src="/analytics-config.js"></script>
+  <script src="/consent.js"></script>
+</body>
+</html>

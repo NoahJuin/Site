@@ -1,0 +1,203 @@
+<script type="application/ld+json">{{{jsonLd}}}</script>
+<script type="application/json" id="shop-data">{{{shopData}}}</script>
+
+<main>
+  <section class="hero" id="commander">
+    <div class="container hero-grid">
+      <div class="hero-visual">
+        <div class="gallery">
+          <img src="/img/hero.svg" alt="Bandeau de sommeil Bluetooth Dormea porté pendant le sommeil" class="gallery-main" id="gallery-main" width="640" height="640">
+          <div class="gallery-thumbs">
+            <button type="button" class="thumb active" data-src="/img/hero.svg" aria-label="Vue portée"><img src="/img/hero.svg" alt=""></button>
+            <button type="button" class="thumb" data-src="/img/product.svg" aria-label="Vue produit"><img src="/img/product.svg" alt=""></button>
+            <button type="button" class="thumb" data-src="/img/inside.svg" aria-label="Écouteurs extra-plats"><img src="/img/inside.svg" alt=""></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="buybox">
+        <p class="eyebrow">Nouveau · Bluetooth 5.3</p>
+        <h1>Le bandeau qui remplace vos écouteurs la nuit</h1>
+        <a href="#avis" class="rating-line" id="rating-line" hidden></a>
+        <p class="lead">Musique, podcasts ou bruit blanc pour vous endormir, sans écouteurs qui font mal, même allongé sur le côté. Occultant, ultra-doux et lavable.</p>
+
+        <ul class="checks">
+          <li>Écouteurs extra-plats : on ne les sent pas sur l'oreiller</li>
+          <li>Occultation totale de la lumière</li>
+          <li>Jusqu'à 10 h d'écoute, recharge USB-C</li>
+        </ul>
+
+        <form id="order-form" class="order-form" novalidate>
+          <fieldset class="offers">
+            <legend>Choisissez votre offre</legend>
+            <div id="offers"></div>
+          </fieldset>
+
+          <fieldset class="colors">
+            <legend id="colors-legend">Couleur</legend>
+            <div id="color-pickers"></div>
+          </fieldset>
+
+          <button type="submit" class="btn btn-cta" id="checkout-btn">
+            <span id="checkout-label">Commander</span>
+          </button>
+          <p class="form-error" id="form-error" role="alert" hidden></p>
+
+          <ul class="trust">
+            <li><img src="/img/icon-truck.svg" alt="" width="22" height="22">Livraison suivie offerte</li>
+            <li><img src="/img/icon-moon.svg" alt="" width="22" height="22">{{shop.returnDays}} nuits pour essayer</li>
+            <li><img src="/img/icon-lock.svg" alt="" width="22" height="22">Paiement sécurisé Stripe</li>
+          </ul>
+          <p class="payments">CB · Visa · Mastercard · Apple Pay · Google Pay</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="container band-inner">
+      <p><strong>6 mm</strong> d'épaisseur d'écouteur</p>
+      <p><strong>10 h</strong> d'autonomie</p>
+      <p><strong>100 %</strong> occultant</p>
+      <p><strong>Lavable</strong> en machine</p>
+    </div>
+  </section>
+
+  <section class="section problem">
+    <div class="container narrow center">
+      <p class="eyebrow">Le problème</p>
+      <h2>Les écouteurs n'ont pas été faits pour dormir</h2>
+      <p class="lead">Ils appuient sur l'oreille dès qu'on se tourne, tombent dans le lit et finissent par réveiller. Résultat : on renonce à la musique ou au bruit blanc qui nous aidaient pourtant à décrocher.</p>
+    </div>
+  </section>
+
+  <section class="section" id="avantages">
+    <div class="container">
+      <div class="center narrow">
+        <p class="eyebrow">La solution</p>
+        <h2>Tout ce qu'il faut pour décrocher, rien qui gêne</h2>
+      </div>
+      <div class="features">
+        <article class="feature">
+          <img src="/img/icon-ear.svg" alt="" width="40" height="40">
+          <h3>Confort côté oreiller</h3>
+          <p>Les haut-parleurs extra-plats sont logés dans la mousse : vous pouvez dormir sur le côté sans aucune pression.</p>
+        </article>
+        <article class="feature">
+          <img src="/img/icon-moon.svg" alt="" width="40" height="40">
+          <h3>Noir complet</h3>
+          <p>Le bandeau bloque la lumière du lever du jour, des écrans ou du partenaire qui lit encore.</p>
+        </article>
+        <article class="feature">
+          <img src="/img/icon-wave.svg" alt="" width="40" height="40">
+          <h3>Votre son pour vous endormir</h3>
+          <p>Méditation, bruit blanc, podcast ou playlist : tout ce que joue votre téléphone, en Bluetooth.</p>
+        </article>
+        <article class="feature">
+          <img src="/img/icon-battery.svg" alt="" width="40" height="40">
+          <h3>Une nuit complète</h3>
+          <p>Jusqu'à 10 h d'écoute et recharge rapide en USB-C. Arrêt automatique avec le minuteur de votre téléphone.</p>
+        </article>
+        <article class="feature">
+          <img src="/img/icon-wash.svg" alt="" width="40" height="40">
+          <h3>Lavable</h3>
+          <p>On retire le module audio en quelques secondes et le tissu passe en machine à 30 °C.</p>
+        </article>
+        <article class="feature">
+          <img src="/img/icon-plane.svg" alt="" width="40" height="40">
+          <h3>Parfait en voyage</h3>
+          <p>Avion, train, sieste au bureau : léger, il se glisse dans la poche et isole du bruit ambiant.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark">
+    <div class="container steps-wrap">
+      <div>
+        <p class="eyebrow eyebrow-light">Comment ça marche</p>
+        <h2>Prêt en 30 secondes</h2>
+      </div>
+      <ol class="steps">
+        <li><span>1</span><div><h3>Chargez</h3><p>Une heure en USB-C suffit pour plusieurs nuits.</p></div></li>
+        <li><span>2</span><div><h3>Appairez</h3><p>Comme un casque Bluetooth classique, une seule fois.</p></div></li>
+        <li><span>3</span><div><h3>Dormez</h3><p>Lancez votre son, enfilez le bandeau, et bonne nuit.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="comparatif">
+    <div class="container narrow">
+      <div class="center">
+        <p class="eyebrow">Comparatif</p>
+        <h2>Pourquoi un bandeau plutôt que des écouteurs ?</h2>
+      </div>
+      <div class="table-wrap">
+        <table class="compare">
+          <thead><tr><th></th><th class="us">{{shop.name}}</th><th>Écouteurs sans fil</th><th>Bouchons d'oreille</th></tr></thead>
+          <tbody>
+            <tr><td>Confortable sur le côté</td><td class="us yes">Oui</td><td class="no">Non</td><td class="yes">Oui</td></tr>
+            <tr><td>Écouter de l'audio</td><td class="us yes">Oui</td><td class="yes">Oui</td><td class="no">Non</td></tr>
+            <tr><td>Bloque la lumière</td><td class="us yes">Oui</td><td class="no">Non</td><td class="no">Non</td></tr>
+            <tr><td>Ne tombe pas dans le lit</td><td class="us yes">Oui</td><td class="no">Non</td><td class="no">Souvent</td></tr>
+            <tr><td>Rien dans le conduit auditif</td><td class="us yes">Oui</td><td class="no">Non</td><td class="no">Non</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft" id="avis">
+    <div class="container">
+      <div class="center narrow">
+        <p class="eyebrow">Avis clients</p>
+        <h2 id="reviews-title">Ils dorment avec {{shop.name}}</h2>
+        <p class="muted" id="reviews-sub">Uniquement des avis d'acheteurs vérifiés, collectés automatiquement après livraison et publiés sans filtre.</p>
+      </div>
+      <div class="reviews" id="reviews"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container guarantee">
+      <img src="/img/icon-shield.svg" alt="" width="72" height="72">
+      <div>
+        <h2>{{shop.returnDays}} nuits pour l'adopter</h2>
+        <p>Essayez-le pendant {{shop.returnDays}} nuits. S'il ne vous convient pas, renvoyez-le et nous vous remboursons intégralement. Vous bénéficiez en plus de la garantie légale de conformité de 2 ans.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft" id="faq">
+    <div class="container narrow">
+      <div class="center">
+        <p class="eyebrow">FAQ</p>
+        <h2>Vos questions</h2>
+      </div>
+      <div class="faq">
+        <details><summary>Est-ce compatible avec mon téléphone ?</summary><p>Oui, avec tout appareil Bluetooth : iPhone, Android, tablette, ordinateur.</p></details>
+        <details><summary>Est-ce que je le sens quand je dors sur le côté ?</summary><p>Les haut-parleurs font environ 6 mm d'épaisseur et sont noyés dans une mousse souple. La plupart des personnes ne les sentent pas du tout.</p></details>
+        <details><summary>Combien de temps tient la batterie ?</summary><p>Jusqu'à 10 heures d'écoute selon le volume. Une charge d'environ 1 h 30 en USB-C suffit pour une recharge complète.</p></details>
+        <details><summary>Comment le laver ?</summary><p>Ouvrez la petite fermeture, retirez le module audio et lavez le bandeau à la main ou en machine à 30 °C dans un filet.</p></details>
+        <details><summary>Quels sont les délais de livraison ?</summary><p>Les commandes sont préparées sous 24 à 48 h puis livrées sous {{shop.shippingDaysMin}} à {{shop.shippingDaysMax}} jours ouvrés, avec un numéro de suivi envoyé automatiquement par e-mail.</p></details>
+        <details><summary>Et si ça ne me convient pas ?</summary><p>Vous avez {{shop.returnDays}} nuits pour l'essayer. Écrivez-nous à {{shop.supportEmail}} et nous organisons le retour et le remboursement. Voir <a href="/livraison-retours">livraison et retours</a>.</p></details>
+        <details><summary>Le paiement est-il sécurisé ?</summary><p>Oui. Le paiement est traité par Stripe (certifié PCI-DSS niveau 1). Nous ne voyons ni ne stockons jamais vos données bancaires.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section final-cta">
+    <div class="container narrow center">
+      <h2>Ce soir, endormez-vous avec votre son préféré</h2>
+      <p class="lead">À partir de {{fromUnitPrice}} le bandeau · Livraison offerte · {{shop.returnDays}} nuits pour essayer</p>
+      <a href="#commander" class="btn btn-cta btn-inline">Choisir mon bandeau</a>
+    </div>
+  </section>
+</main>
+
+<div class="sticky-buy" id="sticky-buy" hidden>
+  <div><strong>{{product.shortName}}</strong><span id="sticky-price"></span></div>
+  <a href="#commander" class="btn">Commander</a>
+</div>
+
+<script src="/app.js" defer></script>

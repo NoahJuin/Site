@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+  <defs>
+    <radialGradient id="bg" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#2d2a5e"/><stop offset="1" stop-color="#12152b"/></radialGradient>
+    <linearGradient id="fabric" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d4266"/><stop offset="1" stop-color="#23263f"/></linearGradient>
+  </defs>
+  <rect width="640" height="640" fill="url(#bg)"/>
+  <ellipse cx="320" cy="470" rx="230" ry="26" fill="#000" opacity=".3"/>
+  <!-- bandeau en arc -->
+  <path d="M80 330c60-110 160-160 240-160s180 50 240 160l-60 40c-50-80-110-118-180-118s-130 38-180 118z" fill="url(#fabric)"/>
+  <path d="M80 330c60-110 160-160 240-160s180 50 240 160" fill="none" stroke="#565c88" stroke-width="4"/>
+  <path d="M140 370c50-80 110-118 180-118s130 38 180 118" fill="none" stroke="#1a1c30" stroke-width="4"/>
+  <path d="M110 342c56-96 140-140 210-140s154 44 210 140" fill="none" stroke="#6b71a3" stroke-width="2" stroke-dasharray="6 8" opacity=".7"/>
+  <!-- haut-parleurs -->
+  <g><ellipse cx="150" cy="320" rx="38" ry="30" fill="#1d2036" transform="rotate(-38 150 320)"/><circle cx="150" cy="320" r="12" fill="#8b7cf6"/></g>
+  <g><ellipse cx="490" cy="320" rx="38" ry="30" fill="#1d2036" transform="rotate(38 490 320)"/><circle cx="490" cy="320" r="12" fill="#8b7cf6"/></g>
+  <!-- module de commande -->
+  <rect x="290" y="186" width="60" height="34" rx="12" fill="#1d2036"/>
+  <g fill="#c9c4ec"><rect x="300" y="201" width="10" height="4" rx="2"/><rect x="330" y="201" width="10" height="4" rx="2"/><rect x="333" y="198" width="4" height="10" rx="2"/></g>
+  <circle cx="320" cy="203" r="4" fill="#f5c66b"/>
+  <text x="320" y="560" text-anchor="middle" font-family="Georgia, serif" font-size="34" fill="#fff">Dormea</text>
+  <text x="320" y="592" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#aaa6cf" letter-spacing="3">BANDEAU DE SOMMEIL BLUETOOTH</text>
+</svg>

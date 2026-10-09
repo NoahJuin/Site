@@ -1,0 +1,12 @@
+<main class="section page">
+  <div class="container narrow">
+    <h1>Suivre ma commande</h1>
+    <p class="lead">Saisissez le numéro reçu par e-mail (ex. DOR-AB12CD) et l'adresse e-mail utilisée lors de la commande.</p>
+    <form method="get" action="/suivi" class="card form-stack">
+      <label>Numéro de commande<input name="commande" value="{{number}}" required autocomplete="off" placeholder="DOR-XXXXXX"></label>
+      <label>E-mail<input type="email" name="email" value="{{email}}" required autocomplete="email"></label>
+      <button class="btn" type="submit">Voir le suivi</button>
+    </form>
+    {{{result}}}
+  </div>
+</main>

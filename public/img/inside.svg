@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+  <rect width="640" height="640" fill="#12152b"/>
+  <g fill="none" stroke="#2a2e52" stroke-width="1"><path d="M0 160h640M0 320h640M0 480h640M160 0v640M320 0v640M480 0v640"/></g>
+  <!-- couches du bandeau -->
+  <g transform="translate(320 300)">
+    <path d="M-240 -40h480l-20 40h-440z" fill="#4a4f7a" opacity=".9"/>
+    <path d="M-220 10h440l-14 28h-412z" fill="#6c5ce7"/>
+    <path d="M-206 48h412l-14 30h-384z" fill="#3a3f62"/>
+  </g>
+  <!-- haut-parleur plat -->
+  <g transform="translate(320 470)">
+    <ellipse rx="110" ry="34" fill="#1d2036" stroke="#8b7cf6" stroke-width="3"/>
+    <ellipse rx="60" ry="18" fill="#2c3054"/>
+    <ellipse rx="18" ry="6" fill="#8b7cf6"/>
+  </g>
+  <path d="M440 470h70" stroke="#f5c66b" stroke-width="2"/><path d="M510 452v36" stroke="#f5c66b" stroke-width="2"/>
+  <text x="520" y="476" font-family="Arial, sans-serif" font-size="22" fill="#f5c66b" font-weight="700">6 mm</text>
+  <g font-family="Arial, sans-serif" font-size="18" fill="#d6d3f0">
+    <text x="40" y="100" font-family="Georgia, serif" font-size="34" fill="#fff">À l'intérieur</text>
+    <text x="40" y="136">Tissu respirant ultra-doux</text>
+    <text x="40" y="162">Mousse à mémoire de forme</text>
+    <text x="40" y="188">Haut-parleurs extra-plats amovibles</text>
+  </g>
+  <g fill="#8b7cf6"><circle cx="560" cy="262" r="5"/><circle cx="560" cy="324" r="5"/><circle cx="560" cy="364" r="5"/></g>
+</svg>
