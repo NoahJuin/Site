@@ -58,3 +58,11 @@ test('CJ : identifiant de variante manquant → erreur explicite', async () => {
   const bad = { ...order, items: JSON.stringify([{ variant: 'gris', qty: 1 }]) };
   await assert.rejects(cj.createOrder(bad), /SUPPLIER_VID_GRIS/);
 });
+
+test('fournisseurs sans identifiants : le site démarre, la commande échoue avec un message clair', async () => {
+  const { createEmailSupplier } = require('../src/suppliers/email');
+  const email = createEmailSupplier({ email: '' });
+  await assert.rejects(email.createOrder(order), /SUPPLIER_EMAIL manquant/);
+  const cj = createCjSupplier({ apiKey: '', fetch: fakeFetch({}) });
+  await assert.rejects(cj.createOrder(order), /CJ_API_KEY manquant/);
+});

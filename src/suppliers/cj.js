@@ -12,7 +12,6 @@ function createCjSupplier(options = {}) {
   const apiKey = options.apiKey || config.supplier.cjApiKey;
   const baseUrl = options.baseUrl || config.supplier.cjBaseUrl;
   const fetchImpl = options.fetch || globalThis.fetch;
-  if (!apiKey) throw new Error('CJ_API_KEY est requis avec SUPPLIER_PROVIDER=cj');
 
   let memoryToken = null;
 
@@ -32,6 +31,7 @@ function createCjSupplier(options = {}) {
   // Le jeton est valable ~15 jours et CJ limite les demandes de jeton :
   // on le met en cache (mémoire + base) et on le renouvelle 1 jour avant expiration.
   async function getToken() {
+    if (!apiKey) throw new Error('CJ_API_KEY manquant : renseignez votre clé API CJdropshipping');
     const cached = memoryToken || (db && JSON.parse(kvGet(db, 'cj_token') || 'null'));
     if (cached && new Date(cached.expiresAt).getTime() - Date.now() > 24 * 3600e3) {
       memoryToken = cached;

@@ -6,8 +6,9 @@ const nodemailer = require('nodemailer');
 const { config, PRODUCT, findVariant } = require('../config');
 
 function createEmailSupplier(options = {}) {
+  // Sans adresse, le site démarre quand même : chaque commande passe en « erreur
+  // fournisseur » avec une alerte admin, jusqu'à ce que SUPPLIER_EMAIL soit renseigné.
   const to = options.email || config.supplier.email;
-  if (!to) throw new Error('SUPPLIER_EMAIL est requis avec SUPPLIER_PROVIDER=email');
   const smtp = config.smtp;
   const transport =
     options.transport ||
@@ -23,6 +24,7 @@ function createEmailSupplier(options = {}) {
   return {
     name: 'email',
     async createOrder(order) {
+      if (!to) throw new Error('SUPPLIER_EMAIL manquant : renseignez l\'adresse de votre fournisseur');
       const address = JSON.parse(order.shipping_address || '{}');
       const items = JSON.parse(order.items);
       const lines = [

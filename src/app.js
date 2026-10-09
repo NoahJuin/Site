@@ -135,9 +135,11 @@ function createApp(ctx) {
       if (err instanceof orders.ValidationError) return res.status(400).json({ error: err.message });
       throw err;
     }
+    if (!stripe && config.env === 'production') {
+      return res.status(503).json({ error: 'Le paiement n\'est pas encore ouvert. Revenez très bientôt !' });
+    }
     const order = orders.createPendingOrder(db, cart);
     if (!stripe) {
-      if (config.env === 'production') return res.status(503).json({ error: 'Paiement indisponible.' });
       return res.json({ url: `/demo-paiement?commande=${encodeURIComponent(order.number)}` });
     }
     try {

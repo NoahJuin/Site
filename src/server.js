@@ -21,11 +21,12 @@ ctx.support = createSupportAgent(ctx);
 if (config.env === 'production') {
   const missing = ['STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET', 'ADMIN_PASSWORD', 'BASE_URL', 'SMTP_HOST'].filter((k) => !process.env[k]);
   if (missing.length) console.warn(`[config] ⚠️ Variables manquantes en production : ${missing.join(', ')}`);
+  if (ctx.supplier.name === 'mock') console.warn('[config] ⚠️ SUPPLIER_PROVIDER=mock : les commandes ne sont transmises à aucun fournisseur.');
 }
 
 const app = createApp(ctx);
 const server = app.listen(config.port, () => {
-  console.log(`${SHOP.name} en ligne sur ${SHOP.baseUrl} (port ${config.port}, fournisseur : ${ctx.supplier.name}${ctx.stripe ? '' : ', paiement en mode démo'}${ctx.support ? `, assistant IA : ${ctx.support.model}` : ''})`);
+  console.log(`${SHOP.name} en ligne sur ${SHOP.baseUrl} (port ${config.port}, fournisseur : ${ctx.supplier.name}${ctx.stripe ? '' : config.env === 'production' ? ', paiement désactivé (STRIPE_SECRET_KEY manquant)' : ', paiement en mode démo'}${ctx.support ? `, assistant IA : ${ctx.support.model}` : ''})`);
 });
 
 if (config.jobs.enabled) {
